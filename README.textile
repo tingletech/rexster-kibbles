@@ -1,5 +1,3 @@
-[[http://www.englishbulldognews.com/forums/images/forumicon/dogfood.png|width=200]]
+!http://www.vectorstock.com/assets/preview/134303/dog-food-vector.jpg!
 
-h2. Rexster's Kibble
-
-A collection of extensions for the "ReXster":http://rexster.tinkerpop.com RESTful graph shell.
+Rexster's Kibble is a collection of extensions for the "ReXster":http://rexster.tinkerpop.com RESTful graph shell.
