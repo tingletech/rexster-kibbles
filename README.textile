@@ -1,0 +1,5 @@
+[[http://www.englishbulldognews.com/forums/images/forumicon/dogfood.png|width=200]]
+
+h2. Rexster's Kibble
+
+A collection of extensions for the "ReXster":http://rexster.tinkerpop.com RESTful graph shell.
