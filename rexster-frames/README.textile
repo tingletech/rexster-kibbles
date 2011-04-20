@@ -14,8 +14,7 @@ h2. Configuration
 
 The Frames Extension requires configuration within @rexster.xml@.  The configuration tells the extension how to map the request URI to a _framed_ element.
 
-bc.
-<graph>
+bc. <graph>
   <graph-name>tinkergraph</graph-name>
   <graph-type>tinkergraph</graph-type>
   <graph-file>data/graph-example-1.xml</graph-file>
