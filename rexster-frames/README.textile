@@ -46,5 +46,3 @@ bc. {
   "version":"0.3-SNAPSHOT",
   "query_time":800.291606
 }
-
-Please note that the Frames Extension is very *experimental* at the moment.
