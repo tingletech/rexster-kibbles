@@ -5,6 +5,7 @@ import com.tinkerpop.blueprints.pgm.impls.tg.TinkerGraphFactory;
 import com.tinkerpop.rexster.RexsterApplication;
 import com.tinkerpop.rexster.RexsterApplicationGraph;
 import com.tinkerpop.rexster.RexsterResourceContext;
+import com.tinkerpop.rexster.extension.ExtensionMethod;
 import com.tinkerpop.rexster.extension.ExtensionResponse;
 import org.apache.commons.collections.iterators.ArrayListIterator;
 import org.apache.commons.configuration.ConfigurationException;
@@ -40,7 +41,7 @@ public class FramesExtensionTest {
     public void beforeTest() {
         this.graph = TinkerGraphFactory.createTinkerGraph();
 
-        // full configuration against test domain
+        // full configuration against test domain olus a dummy
         StringBuffer sb = new StringBuffer();
         sb.append("<extension><namespace>");
         sb.append(FramesExtension.EXTENSION_NAMESPACE);
@@ -278,5 +279,278 @@ public class FramesExtensionTest {
         Assert.assertEquals("marko", jsonObject.optString("name"));
         Assert.assertTrue(jsonObject.has("age"));
         Assert.assertEquals(29, jsonObject.optInt("age"));
+    }
+
+    @Test
+    public void doFramesWorkOnEdgeShortUrl() {
+        final UriInfo uri = this.mockery.mock(UriInfo.class);
+        final List<PathSegment> pathSegments = new ArrayList<PathSegment>();
+        final PathSegment graphPathSegment = this.mockery.mock(PathSegment.class, "graphPathSegment");
+        final PathSegment edgePathSegment = this.mockery.mock(PathSegment.class, "edgePathSegment");
+        final PathSegment edgeIdPathSegment = this.mockery.mock(PathSegment.class, "edgeIdPathSegment");
+        final PathSegment namespacePathSegment = this.mockery.mock(PathSegment.class, "namespacePathSegment");
+        final PathSegment extensionPathSegment = this.mockery.mock(PathSegment.class, "extensionPathSegment");
+
+        pathSegments.add(graphPathSegment);
+        pathSegments.add(edgePathSegment);
+        pathSegments.add(edgeIdPathSegment);
+        pathSegments.add(namespacePathSegment);
+        pathSegments.add(extensionPathSegment);
+
+        this.mockery.checking(new Expectations() {{
+            allowing(namespacePathSegment).getPath();
+            will(returnValue(FramesExtension.EXTENSION_NAMESPACE));
+            allowing(extensionPathSegment).getPath();
+            will(returnValue(FramesExtension.EXTENSION_NAME));
+            allowing(uri).getPathSegments();
+            will(returnValue(pathSegments));
+        }});
+
+        // can do a slimmed down RexsterResourceContext
+        this.ctx = new RexsterResourceContext(this.rag, uri, null, null, null, null);
+
+        ExtensionResponse extResp = this.framesExtension.doFramesWorkOnEdge(this.ctx, this.graph, this.graph.getEdge(11), "standard");
+
+        Assert.assertNotNull(extResp);
+        Assert.assertNotNull(extResp.getJerseyResponse());
+
+        Response response = extResp.getJerseyResponse();
+        Assert.assertEquals(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode(), response.getStatus());
+
+        JSONObject jsonObject = (JSONObject) response.getEntity();
+        Assert.assertNotNull(jsonObject);
+        Assert.assertTrue(jsonObject.has("success"));
+        Assert.assertFalse(jsonObject.optBoolean("success"));
+
+    }
+
+    @Test
+    public void doFramesWorkOnEdgeBadMapping() {
+        final UriInfo uri = this.mockery.mock(UriInfo.class);
+        final List<PathSegment> pathSegments = new ArrayList<PathSegment>();
+        final PathSegment graphPathSegment = this.mockery.mock(PathSegment.class, "graphPathSegment");
+        final PathSegment edgePathSegment = this.mockery.mock(PathSegment.class, "edgePathSegment");
+        final PathSegment edgeIdPathSegment = this.mockery.mock(PathSegment.class, "edgeIdPathSegment");
+        final PathSegment namespacePathSegment = this.mockery.mock(PathSegment.class, "namespacePathSegment");
+        final PathSegment extensionPathSegment = this.mockery.mock(PathSegment.class, "extensionPathSegment");
+        final PathSegment frameNamePathSegment = this.mockery.mock(PathSegment.class, "frameNamePathSegment");
+
+        pathSegments.add(graphPathSegment);
+        pathSegments.add(edgePathSegment);
+        pathSegments.add(edgeIdPathSegment);
+        pathSegments.add(namespacePathSegment);
+        pathSegments.add(extensionPathSegment);
+        pathSegments.add(frameNamePathSegment);
+
+        this.mockery.checking(new Expectations() {{
+            allowing(namespacePathSegment).getPath();
+            will(returnValue(FramesExtension.EXTENSION_NAMESPACE));
+            allowing(extensionPathSegment).getPath();
+            will(returnValue(FramesExtension.EXTENSION_NAME));
+            allowing(frameNamePathSegment).getPath();
+            will(returnValue("not-a-frame-in-config"));
+            allowing(uri).getPathSegments();
+            will(returnValue(pathSegments));
+        }});
+
+        // can do a slimmed down RexsterResourceContext
+        this.ctx = new RexsterResourceContext(this.rag, uri, null, null, null, null);
+
+        ExtensionResponse extResp = this.framesExtension.doFramesWorkOnEdge(this.ctx, this.graph, this.graph.getEdge(11), "standard");
+
+        Assert.assertNotNull(extResp);
+        Assert.assertNotNull(extResp.getJerseyResponse());
+
+        Response response = extResp.getJerseyResponse();
+        Assert.assertEquals(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode(), response.getStatus());
+
+        JSONObject jsonObject = (JSONObject) response.getEntity();
+        Assert.assertNotNull(jsonObject);
+        Assert.assertTrue(jsonObject.has("success"));
+        Assert.assertFalse(jsonObject.optBoolean("success"));
+    }
+
+    @Test
+    public void doFramesWorkOnEdgeInvalidFrameRequested() {
+        final UriInfo uri = this.mockery.mock(UriInfo.class);
+        final List<PathSegment> pathSegments = new ArrayList<PathSegment>();
+        final PathSegment graphPathSegment = this.mockery.mock(PathSegment.class, "graphPathSegment");
+        final PathSegment edgePathSegment = this.mockery.mock(PathSegment.class, "edgePathSegment");
+        final PathSegment edgeIdPathSegment = this.mockery.mock(PathSegment.class, "edgeIdPathSegment");
+        final PathSegment namespacePathSegment = this.mockery.mock(PathSegment.class, "namespacePathSegment");
+        final PathSegment extensionPathSegment = this.mockery.mock(PathSegment.class, "extensionPathSegment");
+        final PathSegment frameNamePathSegment = this.mockery.mock(PathSegment.class, "frameNamePathSegment");
+
+        pathSegments.add(graphPathSegment);
+        pathSegments.add(edgePathSegment);
+        pathSegments.add(edgeIdPathSegment);
+        pathSegments.add(namespacePathSegment);
+        pathSegments.add(extensionPathSegment);
+        pathSegments.add(frameNamePathSegment);
+
+        this.mockery.checking(new Expectations() {{
+            allowing(namespacePathSegment).getPath();
+            will(returnValue(FramesExtension.EXTENSION_NAMESPACE));
+            allowing(extensionPathSegment).getPath();
+            will(returnValue(FramesExtension.EXTENSION_NAME));
+            allowing(frameNamePathSegment).getPath();
+            will(returnValue("notreal"));
+            allowing(uri).getPathSegments();
+            will(returnValue(pathSegments));
+        }});
+
+        // can do a slimmed down RexsterResourceContext
+        this.ctx = new RexsterResourceContext(this.rag, uri, null, null, null, null);
+
+        ExtensionResponse extResp = this.framesExtension.doFramesWorkOnEdge(this.ctx, this.graph, this.graph.getEdge(11), "standard");
+
+        Assert.assertNotNull(extResp);
+        Assert.assertNotNull(extResp.getJerseyResponse());
+
+        Response response = extResp.getJerseyResponse();
+        Assert.assertEquals(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode(), response.getStatus());
+
+        JSONObject jsonObject = (JSONObject) response.getEntity();
+        Assert.assertNotNull(jsonObject);
+        Assert.assertTrue(jsonObject.has("success"));
+        Assert.assertFalse(jsonObject.optBoolean("success"));
+    }
+
+    @Test
+    public void doFramesWorkOnEdgeWrapWithCreatedFrameStandardDirection() {
+        final UriInfo uri = this.mockery.mock(UriInfo.class);
+        final List<PathSegment> pathSegments = new ArrayList<PathSegment>();
+        final PathSegment graphPathSegment = this.mockery.mock(PathSegment.class, "graphPathSegment");
+        final PathSegment edgePathSegment = this.mockery.mock(PathSegment.class, "edgePathSegment");
+        final PathSegment edgeIdPathSegment = this.mockery.mock(PathSegment.class, "edgeIdPathSegment");
+        final PathSegment namespacePathSegment = this.mockery.mock(PathSegment.class, "namespacePathSegment");
+        final PathSegment extensionPathSegment = this.mockery.mock(PathSegment.class, "extensionPathSegment");
+        final PathSegment frameNamePathSegment = this.mockery.mock(PathSegment.class, "frameNamePathSegment");
+
+        pathSegments.add(graphPathSegment);
+        pathSegments.add(edgePathSegment);
+        pathSegments.add(edgeIdPathSegment);
+        pathSegments.add(namespacePathSegment);
+        pathSegments.add(extensionPathSegment);
+        pathSegments.add(frameNamePathSegment);
+
+        this.mockery.checking(new Expectations() {{
+            allowing(namespacePathSegment).getPath();
+            will(returnValue(FramesExtension.EXTENSION_NAMESPACE));
+            allowing(extensionPathSegment).getPath();
+            will(returnValue(FramesExtension.EXTENSION_NAME));
+            allowing(frameNamePathSegment).getPath();
+            will(returnValue("created"));
+            allowing(uri).getPathSegments();
+            will(returnValue(pathSegments));
+        }});
+
+        // can do a slimmed down RexsterResourceContext
+        this.ctx = new RexsterResourceContext(this.rag, uri, null, null, null, null);
+
+        ExtensionResponse extResp = this.framesExtension.doFramesWorkOnEdge(this.ctx, this.graph, this.graph.getEdge(11), "standard");
+
+        Assert.assertNotNull(extResp);
+        Assert.assertNotNull(extResp.getJerseyResponse());
+
+        Response response = extResp.getJerseyResponse();
+        Assert.assertEquals(Response.Status.OK.getStatusCode(), response.getStatus());
+
+        JSONObject jsonObject = (JSONObject) response.getEntity();
+        Assert.assertNotNull(jsonObject);
+        Assert.assertTrue(jsonObject.has("weight"));
+        Assert.assertEquals("0.4", jsonObject.optString("weight"));
+    }
+
+    @Test
+    public void doFramesWorkOnEdgeNoDirection() {
+        final UriInfo uri = this.mockery.mock(UriInfo.class);
+        final List<PathSegment> pathSegments = new ArrayList<PathSegment>();
+        final PathSegment graphPathSegment = this.mockery.mock(PathSegment.class, "graphPathSegment");
+        final PathSegment edgePathSegment = this.mockery.mock(PathSegment.class, "edgePathSegment");
+        final PathSegment edgeIdPathSegment = this.mockery.mock(PathSegment.class, "edgeIdPathSegment");
+        final PathSegment namespacePathSegment = this.mockery.mock(PathSegment.class, "namespacePathSegment");
+        final PathSegment extensionPathSegment = this.mockery.mock(PathSegment.class, "extensionPathSegment");
+        final PathSegment frameNamePathSegment = this.mockery.mock(PathSegment.class, "frameNamePathSegment");
+
+        pathSegments.add(graphPathSegment);
+        pathSegments.add(edgePathSegment);
+        pathSegments.add(edgeIdPathSegment);
+        pathSegments.add(namespacePathSegment);
+        pathSegments.add(extensionPathSegment);
+        pathSegments.add(frameNamePathSegment);
+
+        this.mockery.checking(new Expectations() {{
+            allowing(namespacePathSegment).getPath();
+            will(returnValue(FramesExtension.EXTENSION_NAMESPACE));
+            allowing(extensionPathSegment).getPath();
+            will(returnValue(FramesExtension.EXTENSION_NAME));
+            allowing(frameNamePathSegment).getPath();
+            will(returnValue("created"));
+            allowing(uri).getPathSegments();
+            will(returnValue(pathSegments));
+        }});
+
+        // can do a slimmed down RexsterResourceContext
+        this.ctx = new RexsterResourceContext(this.rag, uri, null, null, null, null);
+
+        ExtensionResponse extResp = this.framesExtension.doFramesWorkOnEdge(this.ctx, this.graph, this.graph.getEdge(11), null);
+
+        Assert.assertNotNull(extResp);
+        Assert.assertNotNull(extResp.getJerseyResponse());
+
+        Response response = extResp.getJerseyResponse();
+        Assert.assertEquals(Response.Status.OK.getStatusCode(), response.getStatus());
+
+        JSONObject jsonObject = (JSONObject) response.getEntity();
+        Assert.assertNotNull(jsonObject);
+        Assert.assertTrue(jsonObject.has("weight"));
+        Assert.assertEquals("0.4", jsonObject.optString("weight"));
+    }
+
+    @Test
+    public void doFramesWorkOnEdgeBadDirection() {
+        final UriInfo uri = this.mockery.mock(UriInfo.class);
+        final List<PathSegment> pathSegments = new ArrayList<PathSegment>();
+        final PathSegment graphPathSegment = this.mockery.mock(PathSegment.class, "graphPathSegment");
+        final PathSegment edgePathSegment = this.mockery.mock(PathSegment.class, "edgePathSegment");
+        final PathSegment edgeIdPathSegment = this.mockery.mock(PathSegment.class, "edgeIdPathSegment");
+        final PathSegment namespacePathSegment = this.mockery.mock(PathSegment.class, "namespacePathSegment");
+        final PathSegment extensionPathSegment = this.mockery.mock(PathSegment.class, "extensionPathSegment");
+        final PathSegment frameNamePathSegment = this.mockery.mock(PathSegment.class, "frameNamePathSegment");
+
+        pathSegments.add(graphPathSegment);
+        pathSegments.add(edgePathSegment);
+        pathSegments.add(edgeIdPathSegment);
+        pathSegments.add(namespacePathSegment);
+        pathSegments.add(extensionPathSegment);
+        pathSegments.add(frameNamePathSegment);
+
+        this.mockery.checking(new Expectations() {{
+            allowing(namespacePathSegment).getPath();
+            will(returnValue(FramesExtension.EXTENSION_NAMESPACE));
+            allowing(extensionPathSegment).getPath();
+            will(returnValue(FramesExtension.EXTENSION_NAME));
+            allowing(frameNamePathSegment).getPath();
+            will(returnValue("notreal"));
+            allowing(uri).getPathSegments();
+            will(returnValue(pathSegments));
+        }});
+
+        // can do a slimmed down RexsterResourceContext
+        this.ctx = new RexsterResourceContext(this.rag, uri, null, null, null, new ExtensionMethod(null, null, null));
+
+        ExtensionResponse extResp = this.framesExtension.doFramesWorkOnEdge(this.ctx, this.graph, this.graph.getEdge(11), "bad-direction");
+
+        Assert.assertNotNull(extResp);
+        Assert.assertNotNull(extResp.getJerseyResponse());
+
+        Response response = extResp.getJerseyResponse();
+        Assert.assertEquals(Response.Status.BAD_REQUEST.getStatusCode(), response.getStatus());
+
+        JSONObject jsonObject = (JSONObject) response.getEntity();
+        Assert.assertNotNull(jsonObject);
+        Assert.assertTrue(jsonObject.has("success"));
+        Assert.assertFalse(jsonObject.optBoolean("success"));
     }
 }

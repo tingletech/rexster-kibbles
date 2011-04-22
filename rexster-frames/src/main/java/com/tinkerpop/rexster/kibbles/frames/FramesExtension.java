@@ -1,7 +1,10 @@
 package com.tinkerpop.rexster.kibbles.frames;
 
+import com.tinkerpop.blueprints.pgm.Edge;
+import com.tinkerpop.blueprints.pgm.Element;
 import com.tinkerpop.blueprints.pgm.Graph;
 import com.tinkerpop.blueprints.pgm.Vertex;
+import com.tinkerpop.frames.Direction;
 import com.tinkerpop.frames.FramesManager;
 import com.tinkerpop.frames.Property;
 import com.tinkerpop.rexster.RexsterResourceContext;
@@ -9,6 +12,7 @@ import com.tinkerpop.rexster.extension.*;
 import org.apache.log4j.Logger;
 
 import javax.ws.rs.core.PathSegment;
+import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.lang.reflect.Method;
 import java.util.HashMap;
@@ -30,11 +34,58 @@ public class FramesExtension extends AbstractRexsterExtension {
     public static final String EXTENSION_NAME = "frames";
     public static final String EXTENSION_NAMESPACE = "tp";
 
+    public static final String TOKEN_STANDARD = "standard";
+    public static final String TOKEN_INVERSE = "inverse";
+
+    @ExtensionDefinition(extensionPoint = ExtensionPoint.EDGE)
+    @ExtensionDescriptor(description = "Frames extension for an edge.")
+    public ExtensionResponse doFramesWorkOnEdge(@RexsterContext RexsterResourceContext rexsterResourceContext,
+                                                  @RexsterContext Graph graph,
+                                                  @RexsterContext Edge edge,
+                                                  @ExtensionRequestParameter(name = "direction", description = "the direction of the edge (must be \"" + TOKEN_STANDARD + "\" or \"" + TOKEN_INVERSE + "\" with the default being \"" + TOKEN_STANDARD + "\"") String directionString){
+        Direction direction = Direction.STANDARD;
+        if (directionString != null && !directionString.isEmpty()) {
+            if (directionString.equals(TOKEN_STANDARD)) {
+                direction = Direction.STANDARD;
+            } else if (directionString.equals(TOKEN_INVERSE)) {
+                direction = Direction.INVERSE;
+            } else {
+                ExtensionMethod extMethod = rexsterResourceContext.getExtensionMethod();
+                return ExtensionResponse.error(
+                        "the direction parameter must be (must be \"" + TOKEN_STANDARD + "\" or \"" + TOKEN_INVERSE + "\"",
+                        null,
+                        Response.Status.BAD_REQUEST.getStatusCode(),
+                        null,
+                        generateErrorJson(extMethod.getExtensionApiAsJson()));
+            }
+        }
+
+        return this.frameItUp(rexsterResourceContext, graph, edge, direction);
+    }
+
     @ExtensionDefinition(extensionPoint = ExtensionPoint.VERTEX)
     @ExtensionDescriptor(description = "Frames extension for a vertex.")
     public ExtensionResponse doFramesWorkOnVertex(@RexsterContext RexsterResourceContext rexsterResourceContext,
                                                   @RexsterContext Graph graph,
                                                   @RexsterContext Vertex vertex){
+        return this.frameItUp(rexsterResourceContext, graph, vertex, null);
+    }
+
+    /**
+     * Frames up a graph element.
+     * @param rexsterResourceContext The Rexster context.
+     * @param graph The graph from which the element is framed.
+     * @param element A vertex or an edge.
+     * @param direction The direction of the edge.  Only relevant for frame edges and should be
+     *                  set to null for vertices.
+     * @return The response.
+     */
+    private ExtensionResponse frameItUp(RexsterResourceContext rexsterResourceContext, Graph graph, Element element, Direction direction) {
+
+        if (element instanceof Edge && direction == null) {
+            throw new IllegalArgumentException("Direction cannot be null");
+        }
+
         ExtensionResponse extensionResponse;
         FramesManager manager = new FramesManager(graph);
 
@@ -64,7 +115,13 @@ public class FramesExtension extends AbstractRexsterExtension {
 
             try {
                 Class clazz = Class.forName(frameClassName);
-                Object obj = manager.frame(vertex, clazz);
+                Object obj = null;
+
+                if (element instanceof Vertex) {
+                    obj = manager.frame((Vertex) element, clazz);
+                } else if (element instanceof Edge) {
+                    obj = manager.frame((Edge) element, Direction.STANDARD, clazz);
+                }
 
                 Map map = new HashMap();
 
