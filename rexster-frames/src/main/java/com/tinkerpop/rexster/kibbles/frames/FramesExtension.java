@@ -52,13 +52,13 @@ public class FramesExtension extends AbstractRexsterExtension {
             }
 
             if (domainObjectMappingName.isEmpty()) {
-                extensionResponse = ExtensionResponse.error(
+                return ExtensionResponse.error(
                         "A Frames class was not specified in the URI", generateErrorJson());
             }
 
             String frameClassName = mapFrames.get(domainObjectMappingName);
             if (frameClassName == null || frameClassName.isEmpty()) {
-                extensionResponse = ExtensionResponse.error(
+                return ExtensionResponse.error(
                         "Frames configuration does not contain a Frames class for " + domainObjectMappingName, generateErrorJson());
             }
 
