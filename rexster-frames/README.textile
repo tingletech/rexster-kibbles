@@ -8,7 +8,8 @@ h3. GET Operations
 
 |_. returns |_. uri |_. description |
 | @@Property@ "getters" of _frame_ | @http://base/graph/vertices/1/tp/frames/{frame}@ | maps vertex 1 to the specified _frame_ |
-| @@Property@ "getters" of _frame_ | @http://base/graph/edges/1/tp/frames/{frame}@ | maps edge 1 to the specified _frame_ |
+| @@Property@ "getters" of _frame_ | @http://base/graph/edges/1/tp/frames/{frame}@ | maps edge 1 to the specified _frame_ with standard directionality |
+| @@Property@ "getters" of _frame_ | @http://base/graph/edges/1/tp/frames/{frame}?direction=inverse@ | maps edge 1 to the specified _frame_ with inverse directionality |
 
 h2. Configuration
 
@@ -37,6 +38,13 @@ The @configuration@ element defines a series of key/value pairs, where each keye
 
 @http://localhost:8182/tinkergraph/vertices/1/tp/frames/person@
 
-would find the vertex with an identifier of "1", wrap the returned vertex in a @Person@ frame, and utilize the @@Property@ "Frames annotations":https://github.com/tinkerpop/frames/wiki/Annotations to "get" a Person object as JSON.
+would find the vertex with an identifier of "1", wrap the returned vertex in a @Person@ frame, and utilize the @@Property@ "Frames annotations":https://github.com/tinkerpop/frames/wiki/Annotations to "get" a Person object as JSON.  The JSON would look like this:
+
+bc. {
+  "name":"marko",
+  "age":29,
+  "version":"0.3-SNAPSHOT",
+  "query_time":800.291606
+}
 
 Please note that the Frames Extension is very *experimental* at the moment.
