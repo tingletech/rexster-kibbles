@@ -44,5 +44,5 @@ bc. {
   "name":"marko",
   "age":29,
   "version":"0.3-SNAPSHOT",
-  "query_time":800.291606
+  "queryTime":24.40612
 }
