@@ -2,12 +2,10 @@ package com.tinkerpop.rexster.kibbles.frames;
 
 import com.tinkerpop.blueprints.pgm.Graph;
 import com.tinkerpop.blueprints.pgm.impls.tg.TinkerGraphFactory;
-import com.tinkerpop.rexster.RexsterApplication;
 import com.tinkerpop.rexster.RexsterApplicationGraph;
 import com.tinkerpop.rexster.RexsterResourceContext;
 import com.tinkerpop.rexster.extension.ExtensionMethod;
 import com.tinkerpop.rexster.extension.ExtensionResponse;
-import org.apache.commons.collections.iterators.ArrayListIterator;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.HierarchicalConfiguration;
 import com.tinkerpop.rexster.extension.ExtensionConfiguration;
@@ -124,7 +122,7 @@ public class FramesExtensionTest {
         }});
 
         // can do a slimmed down RexsterResourceContext
-        this.ctx = new RexsterResourceContext(this.rag, uri, null, null, null, null);
+        this.ctx = new RexsterResourceContext(this.rag, uri, null, null, null);
 
         ExtensionResponse extResp = this.framesExtension.doFramesWorkOnVertex(this.ctx, this.graph, this.graph.getVertex(1));
 
@@ -171,7 +169,7 @@ public class FramesExtensionTest {
         }});
 
         // can do a slimmed down RexsterResourceContext
-        this.ctx = new RexsterResourceContext(this.rag, uri, null, null, null, null);
+        this.ctx = new RexsterResourceContext(this.rag, uri, null, null, null);
 
         ExtensionResponse extResp = this.framesExtension.doFramesWorkOnVertex(this.ctx, this.graph, this.graph.getVertex(1));
 
@@ -217,7 +215,7 @@ public class FramesExtensionTest {
         }});
 
         // can do a slimmed down RexsterResourceContext
-        this.ctx = new RexsterResourceContext(this.rag, uri, null, null, null, null);
+        this.ctx = new RexsterResourceContext(this.rag, uri, null, null, null);
 
         ExtensionResponse extResp = this.framesExtension.doFramesWorkOnVertex(this.ctx, this.graph, this.graph.getVertex(1));
 
@@ -263,7 +261,7 @@ public class FramesExtensionTest {
         }});
 
         // can do a slimmed down RexsterResourceContext
-        this.ctx = new RexsterResourceContext(this.rag, uri, null, null, null, null);
+        this.ctx = new RexsterResourceContext(this.rag, uri, null, null, null);
 
         ExtensionResponse extResp = this.framesExtension.doFramesWorkOnVertex(this.ctx, this.graph, this.graph.getVertex(1));
 
@@ -307,7 +305,7 @@ public class FramesExtensionTest {
         }});
 
         // can do a slimmed down RexsterResourceContext
-        this.ctx = new RexsterResourceContext(this.rag, uri, null, null, null, null);
+        this.ctx = new RexsterResourceContext(this.rag, uri, null, null, null);
 
         ExtensionResponse extResp = this.framesExtension.doFramesWorkOnEdge(this.ctx, this.graph, this.graph.getEdge(11), "standard");
 
@@ -354,7 +352,7 @@ public class FramesExtensionTest {
         }});
 
         // can do a slimmed down RexsterResourceContext
-        this.ctx = new RexsterResourceContext(this.rag, uri, null, null, null, null);
+        this.ctx = new RexsterResourceContext(this.rag, uri, null, null, null);
 
         ExtensionResponse extResp = this.framesExtension.doFramesWorkOnEdge(this.ctx, this.graph, this.graph.getEdge(11), "standard");
 
@@ -400,7 +398,7 @@ public class FramesExtensionTest {
         }});
 
         // can do a slimmed down RexsterResourceContext
-        this.ctx = new RexsterResourceContext(this.rag, uri, null, null, null, null);
+        this.ctx = new RexsterResourceContext(this.rag, uri, null, null, null);
 
         ExtensionResponse extResp = this.framesExtension.doFramesWorkOnEdge(this.ctx, this.graph, this.graph.getEdge(11), "standard");
 
@@ -446,7 +444,7 @@ public class FramesExtensionTest {
         }});
 
         // can do a slimmed down RexsterResourceContext
-        this.ctx = new RexsterResourceContext(this.rag, uri, null, null, null, null);
+        this.ctx = new RexsterResourceContext(this.rag, uri, null, null, null);
 
         ExtensionResponse extResp = this.framesExtension.doFramesWorkOnEdge(this.ctx, this.graph, this.graph.getEdge(11), "standard");
 
@@ -492,7 +490,7 @@ public class FramesExtensionTest {
         }});
 
         // can do a slimmed down RexsterResourceContext
-        this.ctx = new RexsterResourceContext(this.rag, uri, null, null, null, null);
+        this.ctx = new RexsterResourceContext(this.rag, uri, null, null, null);
 
         ExtensionResponse extResp = this.framesExtension.doFramesWorkOnEdge(this.ctx, this.graph, this.graph.getEdge(11), null);
 
@@ -538,7 +536,7 @@ public class FramesExtensionTest {
         }});
 
         // can do a slimmed down RexsterResourceContext
-        this.ctx = new RexsterResourceContext(this.rag, uri, null, null, null, new ExtensionMethod(null, null, null));
+        this.ctx = new RexsterResourceContext(this.rag, uri, null, null, new ExtensionMethod(null, null, null));
 
         ExtensionResponse extResp = this.framesExtension.doFramesWorkOnEdge(this.ctx, this.graph, this.graph.getEdge(11), "bad-direction");
 
