@@ -13,7 +13,6 @@ import org.apache.commons.configuration.XMLConfiguration;
 import org.codehaus.jettison.json.JSONObject;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
-import org.jmock.States;
 import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Assert;
 import org.junit.Before;
@@ -32,7 +31,6 @@ public class FramesExtensionTest {
     private Mockery mockery = new JUnit4Mockery();
     private RexsterResourceContext ctx;
     private FramesExtension framesExtension = new FramesExtension();
-    private States test = mockery.states("test");
     private RexsterApplicationGraph rag;
 
     @Before
@@ -98,28 +96,7 @@ public class FramesExtensionTest {
 
     @Test
     public void doFramesWorkOnVertexShortUrl() {
-        final UriInfo uri = this.mockery.mock(UriInfo.class);
-        final List<PathSegment> pathSegments = new ArrayList<PathSegment>();
-        final PathSegment graphPathSegment = this.mockery.mock(PathSegment.class, "graphPathSegment");
-        final PathSegment vertexPathSegment = this.mockery.mock(PathSegment.class, "vertexPathSegment");
-        final PathSegment vertexIdPathSegment = this.mockery.mock(PathSegment.class, "vertexIdPathSegment");
-        final PathSegment namespacePathSegment = this.mockery.mock(PathSegment.class, "namespacePathSegment");
-        final PathSegment extensionPathSegment = this.mockery.mock(PathSegment.class, "extensionPathSegment");
-
-        pathSegments.add(graphPathSegment);
-        pathSegments.add(vertexPathSegment);
-        pathSegments.add(vertexIdPathSegment);
-        pathSegments.add(namespacePathSegment);
-        pathSegments.add(extensionPathSegment);
-
-        this.mockery.checking(new Expectations() {{
-            allowing(namespacePathSegment).getPath();
-            will(returnValue(FramesExtension.EXTENSION_NAMESPACE));
-            allowing(extensionPathSegment).getPath();
-            will(returnValue(FramesExtension.EXTENSION_NAME));
-            allowing(uri).getPathSegments();
-            will(returnValue(pathSegments));
-        }});
+        final UriInfo uri = mockTheUri(false, "");
 
         // can do a slimmed down RexsterResourceContext
         this.ctx = new RexsterResourceContext(this.rag, uri, null, null, null);
@@ -141,32 +118,7 @@ public class FramesExtensionTest {
 
     @Test
     public void doFramesWorkOnVertexBadMapping() {
-        final UriInfo uri = this.mockery.mock(UriInfo.class);
-        final List<PathSegment> pathSegments = new ArrayList<PathSegment>();
-        final PathSegment graphPathSegment = this.mockery.mock(PathSegment.class, "graphPathSegment");
-        final PathSegment vertexPathSegment = this.mockery.mock(PathSegment.class, "vertexPathSegment");
-        final PathSegment vertexIdPathSegment = this.mockery.mock(PathSegment.class, "vertexIdPathSegment");
-        final PathSegment namespacePathSegment = this.mockery.mock(PathSegment.class, "namespacePathSegment");
-        final PathSegment extensionPathSegment = this.mockery.mock(PathSegment.class, "extensionPathSegment");
-        final PathSegment frameNamePathSegment = this.mockery.mock(PathSegment.class, "frameNamePathSegment");
-
-        pathSegments.add(graphPathSegment);
-        pathSegments.add(vertexPathSegment);
-        pathSegments.add(vertexIdPathSegment);
-        pathSegments.add(namespacePathSegment);
-        pathSegments.add(extensionPathSegment);
-        pathSegments.add(frameNamePathSegment);
-
-        this.mockery.checking(new Expectations() {{
-            allowing(namespacePathSegment).getPath();
-            will(returnValue(FramesExtension.EXTENSION_NAMESPACE));
-            allowing(extensionPathSegment).getPath();
-            will(returnValue(FramesExtension.EXTENSION_NAME));
-            allowing(frameNamePathSegment).getPath();
-            will(returnValue("not-a-frame-in-config"));
-            allowing(uri).getPathSegments();
-            will(returnValue(pathSegments));
-        }});
+        final UriInfo uri = mockTheUri(true, "not-a-frame-in-config");
 
         // can do a slimmed down RexsterResourceContext
         this.ctx = new RexsterResourceContext(this.rag, uri, null, null, null);
@@ -187,32 +139,7 @@ public class FramesExtensionTest {
 
     @Test
     public void doFramesWorkOnVertexInvalidFrameRequested() {
-        final UriInfo uri = this.mockery.mock(UriInfo.class);
-        final List<PathSegment> pathSegments = new ArrayList<PathSegment>();
-        final PathSegment graphPathSegment = this.mockery.mock(PathSegment.class, "graphPathSegment");
-        final PathSegment vertexPathSegment = this.mockery.mock(PathSegment.class, "vertexPathSegment");
-        final PathSegment vertexIdPathSegment = this.mockery.mock(PathSegment.class, "vertexIdPathSegment");
-        final PathSegment namespacePathSegment = this.mockery.mock(PathSegment.class, "namespacePathSegment");
-        final PathSegment extensionPathSegment = this.mockery.mock(PathSegment.class, "extensionPathSegment");
-        final PathSegment frameNamePathSegment = this.mockery.mock(PathSegment.class, "frameNamePathSegment");
-
-        pathSegments.add(graphPathSegment);
-        pathSegments.add(vertexPathSegment);
-        pathSegments.add(vertexIdPathSegment);
-        pathSegments.add(namespacePathSegment);
-        pathSegments.add(extensionPathSegment);
-        pathSegments.add(frameNamePathSegment);
-
-        this.mockery.checking(new Expectations() {{
-            allowing(namespacePathSegment).getPath();
-            will(returnValue(FramesExtension.EXTENSION_NAMESPACE));
-            allowing(extensionPathSegment).getPath();
-            will(returnValue(FramesExtension.EXTENSION_NAME));
-            allowing(frameNamePathSegment).getPath();
-            will(returnValue("notreal"));
-            allowing(uri).getPathSegments();
-            will(returnValue(pathSegments));
-        }});
+        final UriInfo uri = mockTheUri(true, "notreal");
 
         // can do a slimmed down RexsterResourceContext
         this.ctx = new RexsterResourceContext(this.rag, uri, null, null, null);
@@ -233,32 +160,7 @@ public class FramesExtensionTest {
 
     @Test
     public void doFramesWorkOnVertexWrapWithPersonFrame() {
-        final UriInfo uri = this.mockery.mock(UriInfo.class);
-        final List<PathSegment> pathSegments = new ArrayList<PathSegment>();
-        final PathSegment graphPathSegment = this.mockery.mock(PathSegment.class, "graphPathSegment");
-        final PathSegment vertexPathSegment = this.mockery.mock(PathSegment.class, "vertexPathSegment");
-        final PathSegment vertexIdPathSegment = this.mockery.mock(PathSegment.class, "vertexIdPathSegment");
-        final PathSegment namespacePathSegment = this.mockery.mock(PathSegment.class, "namespacePathSegment");
-        final PathSegment extensionPathSegment = this.mockery.mock(PathSegment.class, "extensionPathSegment");
-        final PathSegment frameNamePathSegment = this.mockery.mock(PathSegment.class, "frameNamePathSegment");
-
-        pathSegments.add(graphPathSegment);
-        pathSegments.add(vertexPathSegment);
-        pathSegments.add(vertexIdPathSegment);
-        pathSegments.add(namespacePathSegment);
-        pathSegments.add(extensionPathSegment);
-        pathSegments.add(frameNamePathSegment);
-
-        this.mockery.checking(new Expectations() {{
-            allowing(namespacePathSegment).getPath();
-            will(returnValue(FramesExtension.EXTENSION_NAMESPACE));
-            allowing(extensionPathSegment).getPath();
-            will(returnValue(FramesExtension.EXTENSION_NAME));
-            allowing(frameNamePathSegment).getPath();
-            will(returnValue("person"));
-            allowing(uri).getPathSegments();
-            will(returnValue(pathSegments));
-        }});
+        final UriInfo uri = mockTheUri(true, "person");
 
         // can do a slimmed down RexsterResourceContext
         this.ctx = new RexsterResourceContext(this.rag, uri, null, null, null);
@@ -281,28 +183,7 @@ public class FramesExtensionTest {
 
     @Test
     public void doFramesWorkOnEdgeShortUrl() {
-        final UriInfo uri = this.mockery.mock(UriInfo.class);
-        final List<PathSegment> pathSegments = new ArrayList<PathSegment>();
-        final PathSegment graphPathSegment = this.mockery.mock(PathSegment.class, "graphPathSegment");
-        final PathSegment edgePathSegment = this.mockery.mock(PathSegment.class, "edgePathSegment");
-        final PathSegment edgeIdPathSegment = this.mockery.mock(PathSegment.class, "edgeIdPathSegment");
-        final PathSegment namespacePathSegment = this.mockery.mock(PathSegment.class, "namespacePathSegment");
-        final PathSegment extensionPathSegment = this.mockery.mock(PathSegment.class, "extensionPathSegment");
-
-        pathSegments.add(graphPathSegment);
-        pathSegments.add(edgePathSegment);
-        pathSegments.add(edgeIdPathSegment);
-        pathSegments.add(namespacePathSegment);
-        pathSegments.add(extensionPathSegment);
-
-        this.mockery.checking(new Expectations() {{
-            allowing(namespacePathSegment).getPath();
-            will(returnValue(FramesExtension.EXTENSION_NAMESPACE));
-            allowing(extensionPathSegment).getPath();
-            will(returnValue(FramesExtension.EXTENSION_NAME));
-            allowing(uri).getPathSegments();
-            will(returnValue(pathSegments));
-        }});
+        final UriInfo uri = mockTheUri(false, "");
 
         // can do a slimmed down RexsterResourceContext
         this.ctx = new RexsterResourceContext(this.rag, uri, null, null, null);
@@ -324,32 +205,7 @@ public class FramesExtensionTest {
 
     @Test
     public void doFramesWorkOnEdgeBadMapping() {
-        final UriInfo uri = this.mockery.mock(UriInfo.class);
-        final List<PathSegment> pathSegments = new ArrayList<PathSegment>();
-        final PathSegment graphPathSegment = this.mockery.mock(PathSegment.class, "graphPathSegment");
-        final PathSegment edgePathSegment = this.mockery.mock(PathSegment.class, "edgePathSegment");
-        final PathSegment edgeIdPathSegment = this.mockery.mock(PathSegment.class, "edgeIdPathSegment");
-        final PathSegment namespacePathSegment = this.mockery.mock(PathSegment.class, "namespacePathSegment");
-        final PathSegment extensionPathSegment = this.mockery.mock(PathSegment.class, "extensionPathSegment");
-        final PathSegment frameNamePathSegment = this.mockery.mock(PathSegment.class, "frameNamePathSegment");
-
-        pathSegments.add(graphPathSegment);
-        pathSegments.add(edgePathSegment);
-        pathSegments.add(edgeIdPathSegment);
-        pathSegments.add(namespacePathSegment);
-        pathSegments.add(extensionPathSegment);
-        pathSegments.add(frameNamePathSegment);
-
-        this.mockery.checking(new Expectations() {{
-            allowing(namespacePathSegment).getPath();
-            will(returnValue(FramesExtension.EXTENSION_NAMESPACE));
-            allowing(extensionPathSegment).getPath();
-            will(returnValue(FramesExtension.EXTENSION_NAME));
-            allowing(frameNamePathSegment).getPath();
-            will(returnValue("not-a-frame-in-config"));
-            allowing(uri).getPathSegments();
-            will(returnValue(pathSegments));
-        }});
+        final UriInfo uri = mockTheUri(true, "not-a-frame-in-config");
 
         // can do a slimmed down RexsterResourceContext
         this.ctx = new RexsterResourceContext(this.rag, uri, null, null, null);
@@ -370,32 +226,7 @@ public class FramesExtensionTest {
 
     @Test
     public void doFramesWorkOnEdgeInvalidFrameRequested() {
-        final UriInfo uri = this.mockery.mock(UriInfo.class);
-        final List<PathSegment> pathSegments = new ArrayList<PathSegment>();
-        final PathSegment graphPathSegment = this.mockery.mock(PathSegment.class, "graphPathSegment");
-        final PathSegment edgePathSegment = this.mockery.mock(PathSegment.class, "edgePathSegment");
-        final PathSegment edgeIdPathSegment = this.mockery.mock(PathSegment.class, "edgeIdPathSegment");
-        final PathSegment namespacePathSegment = this.mockery.mock(PathSegment.class, "namespacePathSegment");
-        final PathSegment extensionPathSegment = this.mockery.mock(PathSegment.class, "extensionPathSegment");
-        final PathSegment frameNamePathSegment = this.mockery.mock(PathSegment.class, "frameNamePathSegment");
-
-        pathSegments.add(graphPathSegment);
-        pathSegments.add(edgePathSegment);
-        pathSegments.add(edgeIdPathSegment);
-        pathSegments.add(namespacePathSegment);
-        pathSegments.add(extensionPathSegment);
-        pathSegments.add(frameNamePathSegment);
-
-        this.mockery.checking(new Expectations() {{
-            allowing(namespacePathSegment).getPath();
-            will(returnValue(FramesExtension.EXTENSION_NAMESPACE));
-            allowing(extensionPathSegment).getPath();
-            will(returnValue(FramesExtension.EXTENSION_NAME));
-            allowing(frameNamePathSegment).getPath();
-            will(returnValue("notreal"));
-            allowing(uri).getPathSegments();
-            will(returnValue(pathSegments));
-        }});
+        final UriInfo uri = mockTheUri(true, "notreal");
 
         // can do a slimmed down RexsterResourceContext
         this.ctx = new RexsterResourceContext(this.rag, uri, null, null, null);
@@ -416,32 +247,7 @@ public class FramesExtensionTest {
 
     @Test
     public void doFramesWorkOnEdgeWrapWithCreatedFrameStandardDirection() {
-        final UriInfo uri = this.mockery.mock(UriInfo.class);
-        final List<PathSegment> pathSegments = new ArrayList<PathSegment>();
-        final PathSegment graphPathSegment = this.mockery.mock(PathSegment.class, "graphPathSegment");
-        final PathSegment edgePathSegment = this.mockery.mock(PathSegment.class, "edgePathSegment");
-        final PathSegment edgeIdPathSegment = this.mockery.mock(PathSegment.class, "edgeIdPathSegment");
-        final PathSegment namespacePathSegment = this.mockery.mock(PathSegment.class, "namespacePathSegment");
-        final PathSegment extensionPathSegment = this.mockery.mock(PathSegment.class, "extensionPathSegment");
-        final PathSegment frameNamePathSegment = this.mockery.mock(PathSegment.class, "frameNamePathSegment");
-
-        pathSegments.add(graphPathSegment);
-        pathSegments.add(edgePathSegment);
-        pathSegments.add(edgeIdPathSegment);
-        pathSegments.add(namespacePathSegment);
-        pathSegments.add(extensionPathSegment);
-        pathSegments.add(frameNamePathSegment);
-
-        this.mockery.checking(new Expectations() {{
-            allowing(namespacePathSegment).getPath();
-            will(returnValue(FramesExtension.EXTENSION_NAMESPACE));
-            allowing(extensionPathSegment).getPath();
-            will(returnValue(FramesExtension.EXTENSION_NAME));
-            allowing(frameNamePathSegment).getPath();
-            will(returnValue("created"));
-            allowing(uri).getPathSegments();
-            will(returnValue(pathSegments));
-        }});
+        final UriInfo uri = mockTheUri(true, "created");
 
         // can do a slimmed down RexsterResourceContext
         this.ctx = new RexsterResourceContext(this.rag, uri, null, null, null);
@@ -462,32 +268,7 @@ public class FramesExtensionTest {
 
     @Test
     public void doFramesWorkOnEdgeNoDirection() {
-        final UriInfo uri = this.mockery.mock(UriInfo.class);
-        final List<PathSegment> pathSegments = new ArrayList<PathSegment>();
-        final PathSegment graphPathSegment = this.mockery.mock(PathSegment.class, "graphPathSegment");
-        final PathSegment edgePathSegment = this.mockery.mock(PathSegment.class, "edgePathSegment");
-        final PathSegment edgeIdPathSegment = this.mockery.mock(PathSegment.class, "edgeIdPathSegment");
-        final PathSegment namespacePathSegment = this.mockery.mock(PathSegment.class, "namespacePathSegment");
-        final PathSegment extensionPathSegment = this.mockery.mock(PathSegment.class, "extensionPathSegment");
-        final PathSegment frameNamePathSegment = this.mockery.mock(PathSegment.class, "frameNamePathSegment");
-
-        pathSegments.add(graphPathSegment);
-        pathSegments.add(edgePathSegment);
-        pathSegments.add(edgeIdPathSegment);
-        pathSegments.add(namespacePathSegment);
-        pathSegments.add(extensionPathSegment);
-        pathSegments.add(frameNamePathSegment);
-
-        this.mockery.checking(new Expectations() {{
-            allowing(namespacePathSegment).getPath();
-            will(returnValue(FramesExtension.EXTENSION_NAMESPACE));
-            allowing(extensionPathSegment).getPath();
-            will(returnValue(FramesExtension.EXTENSION_NAME));
-            allowing(frameNamePathSegment).getPath();
-            will(returnValue("created"));
-            allowing(uri).getPathSegments();
-            will(returnValue(pathSegments));
-        }});
+        final UriInfo uri = mockTheUri(true, "created");
 
         // can do a slimmed down RexsterResourceContext
         this.ctx = new RexsterResourceContext(this.rag, uri, null, null, null);
@@ -508,32 +289,7 @@ public class FramesExtensionTest {
 
     @Test
     public void doFramesWorkOnEdgeBadDirection() {
-        final UriInfo uri = this.mockery.mock(UriInfo.class);
-        final List<PathSegment> pathSegments = new ArrayList<PathSegment>();
-        final PathSegment graphPathSegment = this.mockery.mock(PathSegment.class, "graphPathSegment");
-        final PathSegment edgePathSegment = this.mockery.mock(PathSegment.class, "edgePathSegment");
-        final PathSegment edgeIdPathSegment = this.mockery.mock(PathSegment.class, "edgeIdPathSegment");
-        final PathSegment namespacePathSegment = this.mockery.mock(PathSegment.class, "namespacePathSegment");
-        final PathSegment extensionPathSegment = this.mockery.mock(PathSegment.class, "extensionPathSegment");
-        final PathSegment frameNamePathSegment = this.mockery.mock(PathSegment.class, "frameNamePathSegment");
-
-        pathSegments.add(graphPathSegment);
-        pathSegments.add(edgePathSegment);
-        pathSegments.add(edgeIdPathSegment);
-        pathSegments.add(namespacePathSegment);
-        pathSegments.add(extensionPathSegment);
-        pathSegments.add(frameNamePathSegment);
-
-        this.mockery.checking(new Expectations() {{
-            allowing(namespacePathSegment).getPath();
-            will(returnValue(FramesExtension.EXTENSION_NAMESPACE));
-            allowing(extensionPathSegment).getPath();
-            will(returnValue(FramesExtension.EXTENSION_NAME));
-            allowing(frameNamePathSegment).getPath();
-            will(returnValue("notreal"));
-            allowing(uri).getPathSegments();
-            will(returnValue(pathSegments));
-        }});
+        final UriInfo uri = mockTheUri(true, "created");
 
         // can do a slimmed down RexsterResourceContext
         this.ctx = new RexsterResourceContext(this.rag, uri, null, null, new ExtensionMethod(null, null, null));
@@ -550,5 +306,42 @@ public class FramesExtensionTest {
         Assert.assertNotNull(jsonObject);
         Assert.assertTrue(jsonObject.has("success"));
         Assert.assertFalse(jsonObject.optBoolean("success"));
+    }
+
+    private UriInfo mockTheUri(final boolean includeFramePath, final String frameNameOfPath) {
+        final UriInfo uri = this.mockery.mock(UriInfo.class);
+        final List<PathSegment> pathSegments = new ArrayList<PathSegment>();
+        final PathSegment graphPathSegment = this.mockery.mock(PathSegment.class, "graphPathSegment");
+        final PathSegment elementPathSegment = this.mockery.mock(PathSegment.class, "elementPathSegment");
+        final PathSegment elementIdPathSegment = this.mockery.mock(PathSegment.class, "elementIdPathSegment");
+        final PathSegment namespacePathSegment = this.mockery.mock(PathSegment.class, "namespacePathSegment");
+        final PathSegment extensionPathSegment = this.mockery.mock(PathSegment.class, "extensionPathSegment");
+        final PathSegment frameNamePathSegment = this.mockery.mock(PathSegment.class, "frameNamePathSegment");
+
+        pathSegments.add(graphPathSegment);
+        pathSegments.add(elementPathSegment);
+        pathSegments.add(elementIdPathSegment);
+        pathSegments.add(namespacePathSegment);
+        pathSegments.add(extensionPathSegment);
+
+        if (includeFramePath) {
+            pathSegments.add(frameNamePathSegment);
+        }
+
+        this.mockery.checking(new Expectations() {{
+            allowing(namespacePathSegment).getPath();
+            will(returnValue(FramesExtension.EXTENSION_NAMESPACE));
+            allowing(extensionPathSegment).getPath();
+            will(returnValue(FramesExtension.EXTENSION_NAME));
+
+            if (includeFramePath) {
+                allowing(frameNamePathSegment).getPath();
+                will(returnValue(frameNameOfPath));
+            }
+
+            allowing(uri).getPathSegments();
+            will(returnValue(pathSegments));
+        }});
+        return uri;
     }
 }
