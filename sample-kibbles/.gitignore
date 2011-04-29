@@ -1,0 +1,6 @@
+*.log
+.idea/
+target
+sample-kibbles.iml
+sample-kibbles.iws
+sample-kibbles.ipr
