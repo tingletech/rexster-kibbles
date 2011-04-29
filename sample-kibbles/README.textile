@@ -1,0 +1,3 @@
+h1. Sample Kibbles
+
+The Sample Kibbles project provides a series of well documented Rexster Extensions to help developers get started in their efforts to extend Rexster.
