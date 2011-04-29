@@ -140,7 +140,7 @@
                     <descriptors>
                         <descriptor>src/assembly/distribution.xml</descriptor>
                     </descriptors>
-                    <finalName>kibbles-frames-${project.version}</finalName>
+                    <finalName>rexster-frames-${project.version}</finalName>
                     <outputDirectory>target</outputDirectory>
                     <workDirectory>target/assembly/work</workDirectory>
                     <tarLongFileMode>warn</tarLongFileMode>
