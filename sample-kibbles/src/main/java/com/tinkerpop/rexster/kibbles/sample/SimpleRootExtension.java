@@ -17,7 +17,7 @@ import java.util.HashMap;
 /**
  * An extension that showcases the methods available to those who wish to extend Rexster.
  *
- * This sample focuses on root-level extensions.  Root-level extensions which add the extension
+ * This sample focuses on root-level extensions.  Root-level extensions add the extension
  * to the root of the specified ExtensionPoint.  No additional pathing is taken into consideration
  * when routing to the service method, therefore, if more than one root-level extension is specified
  * then Rexster may appear to misbehave.  Rexster will choose the first extension method match that
