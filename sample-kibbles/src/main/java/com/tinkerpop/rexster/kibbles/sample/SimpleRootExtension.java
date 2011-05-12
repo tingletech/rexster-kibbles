@@ -23,11 +23,10 @@ import java.util.HashMap;
  * then Rexster may appear to misbehave.  Rexster will choose the first extension method match that
  * it can find when processing a request.
  */
-@ExtensionNaming(name = SimpleRootExtension.EXTENSION_NAME, namespace = SimpleRootExtension.EXTENSION_NAMESPACE)
-public class SimpleRootExtension extends AbstractRexsterExtension {
+@ExtensionNaming(name = SimpleRootExtension.EXTENSION_NAME, namespace = AbstractSampleExtension.EXTENSION_NAMESPACE)
+public class SimpleRootExtension extends AbstractSampleExtension {
 
     public static final String EXTENSION_NAME = "simple-root";
-    public static final String EXTENSION_NAMESPACE = "tp";
 
     /**
      * By adding the @RexsterContext attribute to the "graph" parameter, the graph requested gets

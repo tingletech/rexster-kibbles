@@ -17,8 +17,10 @@ import java.util.Map;
 /**
  * A simple extension that just echoes back the string parameter passed in.
  */
-@ExtensionNaming(namespace = "tp", name = "ping")
-public class PingExtension extends AbstractRexsterExtension {
+@ExtensionNaming(namespace = AbstractSampleExtension.EXTENSION_NAMESPACE, name = PingExtension.EXTENSION_NAME)
+public class PingExtension extends AbstractSampleExtension {
+
+    public static final String EXTENSION_NAME = "ping";
 
     /**
      * Exposes the ping extension from the root of the graph name accepting a single parameter

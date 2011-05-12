@@ -16,10 +16,9 @@ import java.util.Map;
  *   <other-key>other-value</other-key>
  * </configuration>
  */
-@ExtensionNaming(name = MapConfigurationExtension.EXTENSION_NAME, namespace = MapConfigurationExtension.EXTENSION_NAMESPACE)
-public class MapConfigurationExtension extends AbstractRexsterExtension{
+@ExtensionNaming(name = MapConfigurationExtension.EXTENSION_NAME, namespace = AbstractSampleExtension.EXTENSION_NAMESPACE)
+public class MapConfigurationExtension extends AbstractSampleExtension{
     public static final String EXTENSION_NAME = "map-config";
-    public static final String EXTENSION_NAMESPACE = "tp";
 
     private static final String CONFIG_SOME_KEY = "some-key";
     private static final String CONFIG_OTHER_KEY = "other-key";

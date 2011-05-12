@@ -16,10 +16,9 @@ import java.util.HashMap;
  * remain unique.  In the event of a collision, Rexster will serve the request to the
  * first match it finds.
  */
-@ExtensionNaming(name = SimplePathExtension.EXTENSION_NAME, namespace = SimplePathExtension.EXTENSION_NAMESPACE)
-public class SimplePathExtension extends AbstractRexsterExtension {
+@ExtensionNaming(name = SimplePathExtension.EXTENSION_NAME, namespace = AbstractSampleExtension.EXTENSION_NAMESPACE)
+public class SimplePathExtension extends AbstractSampleExtension {
     public static final String EXTENSION_NAME = "simple-path";
-    public static final String EXTENSION_NAMESPACE = "tp";
 
     /**
      * By adding the @RexsterContext attribute to the "graph" parameter, the graph requested gets
