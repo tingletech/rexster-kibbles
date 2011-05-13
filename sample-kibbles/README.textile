@@ -1,3 +1,16 @@
 h1. Sample Kibbles
 
 The Sample Kibbles project provides a series of well documented Rexster Extensions to help developers get started in their efforts to extend Rexster.
+
+The following examples are included:
+
+|_. extension |._ uri |_. description |
+| MapConfigurationExtension | @http://base/graph/tp-sample/map-config@ | Demonstrates how graph specific configuration in rexster.xml can be exposed to the extension. |
+| PingExtension | @http://base/graph/tp-sample/ping@ | Performs a simple echo of the value of a URI query string parameter. |
+| ProducesXmlExtension | @http://base/graph/vertices/1/tp-sample/produces-xml@
+@http://base/graph/edges/1/tp-sample/produces-xml@ | Demonstrates how to return types other than @application/json@. |
+| SimplePathExtension | @http://base/graph/tp-sample/simple-path/some-work@
+@http://base/graph/tp-sample/simple-path/other-work@ | Demonstrates how a pathed extension works where multiple extension methods are exposed from the same extension point. |
+| SimpleRootExtension | @http://base/graph/tp-sample/simple-root@
+@http://base/graph/tp-sample/vertices/1/simple-root@
+@http://base/graph/tp-sample/edges/1/simple-root@ | Demonstrates how a root extension works. |
