@@ -4,7 +4,7 @@ The Sample Kibbles project provides a series of well documented Rexster Extensio
 
 The following examples are included:
 
-|_. extension |._ uri |_. description |
+|_. extension |_. uri |_. description |
 | MapConfigurationExtension | @http://base/graph/tp-sample/map-config@ | Demonstrates how graph specific configuration in rexster.xml can be exposed to the extension. |
 | PingExtension | @http://base/graph/tp-sample/ping@ | Performs a simple echo of the value of a URI query string parameter. |
 | ProducesXmlExtension | @http://base/graph/vertices/1/tp-sample/produces-xml@
