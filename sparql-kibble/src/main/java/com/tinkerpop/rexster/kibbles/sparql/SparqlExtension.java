@@ -14,6 +14,7 @@ import com.tinkerpop.rexster.extension.*;
 import com.tinkerpop.rexster.util.ElementJSONHelper;
 import com.tinkerpop.rexster.util.RequestObjectHelper;
 import info.aduna.iteration.CloseableIteration;
+import org.apache.log4j.Logger;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONObject;
 import org.openrdf.query.BindingSet;
@@ -37,6 +38,8 @@ import java.util.Map;
  */
 @ExtensionNaming(namespace = SparqlExtension.EXTENSION_NAMESPACE, name = SparqlExtension.EXTENSION_NAME)
 public class SparqlExtension extends AbstractRexsterExtension {
+
+    private static Logger logger = Logger.getLogger(SparqlExtension.class);
 
     public static final String EXTENSION_NAMESPACE = "tp";
     public static final String EXTENSION_NAME = "sparql";
@@ -70,7 +73,13 @@ public class SparqlExtension extends AbstractRexsterExtension {
         List<String> returnKeys = RequestObjectHelper.getReturnKeys(requestObject, WILDCARD);
 
         if (!(graph instanceof SailGraph)) {
-            throw new WebApplicationException();
+            ExtensionMethod extMethod = context.getExtensionMethod();
+            return ExtensionResponse.error(
+                    "the graph to which this extension is applied is not a SailGraph implementation",
+                    null,
+                    Response.Status.INTERNAL_SERVER_ERROR.getStatusCode(),
+                    null,
+                    generateErrorJson(extMethod.getExtensionApiAsJson()));
         }
 
         try {
@@ -97,7 +106,9 @@ public class SparqlExtension extends AbstractRexsterExtension {
             return ExtensionResponse.ok(resultObject);
 
         } catch (Exception mqe) {
-            throw new WebApplicationException(mqe);
+            logger.error(mqe);
+            return ExtensionResponse.error(
+                        "Error executing SPARQL query [" + queryString + "]", generateErrorJson());
         }
 
     }
