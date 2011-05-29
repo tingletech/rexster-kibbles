@@ -20,7 +20,7 @@
         <fileSet>
             <directory>target</directory>
             <includes>
-                <include>rexster-frames-*.jar</include>
+                <include>frames-kibble-*.jar</include>
             </includes>
         </fileSet>
     </fileSets>

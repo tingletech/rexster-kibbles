@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.tinkerpop</groupId>
-    <artifactId>rexster-frames</artifactId>
+    <artifactId>frames-kibble</artifactId>
     <version>0.1-SNAPSHOT</version>
 
     <packaging>jar</packaging>
@@ -140,7 +140,7 @@
                     <descriptors>
                         <descriptor>src/assembly/distribution.xml</descriptor>
                     </descriptors>
-                    <finalName>rexster-frames-${project.version}</finalName>
+                    <finalName>frames-kibble-${project.version}</finalName>
                     <outputDirectory>target</outputDirectory>
                     <workDirectory>target/assembly/work</workDirectory>
                     <tarLongFileMode>warn</tarLongFileMode>
