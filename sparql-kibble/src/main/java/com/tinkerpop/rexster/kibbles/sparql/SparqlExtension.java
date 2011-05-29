@@ -4,11 +4,15 @@ package com.tinkerpop.rexster.kibbles.sparql;
 import com.tinkerpop.blueprints.pgm.Edge;
 import com.tinkerpop.blueprints.pgm.Graph;
 import com.tinkerpop.blueprints.pgm.IndexableGraph;
+import com.tinkerpop.blueprints.pgm.Vertex;
 import com.tinkerpop.blueprints.pgm.impls.sail.SailGraph;
 import com.tinkerpop.blueprints.pgm.oupls.sail.GraphSail;
+import com.tinkerpop.rexster.ElementJSONObject;
 import com.tinkerpop.rexster.RexsterResourceContext;
 import com.tinkerpop.rexster.Tokens;
 import com.tinkerpop.rexster.extension.*;
+import com.tinkerpop.rexster.util.ElementJSONHelper;
+import com.tinkerpop.rexster.util.RequestObjectHelper;
 import info.aduna.iteration.CloseableIteration;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONObject;
@@ -25,6 +29,7 @@ import org.openrdf.sail.SailException;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -35,13 +40,21 @@ public class SparqlExtension extends AbstractRexsterExtension {
 
     public static final String EXTENSION_NAMESPACE = "tp";
     public static final String EXTENSION_NAME = "sparql";
+    private static final String WILDCARD = "*";
+
+    private static final String API_SHOW_TYPES = "displays the properties of the elements with their native data type (default is false)";
+    private static final String API_QUERY = "the SPARQL query to be evaluated";
+    private static final String API_RETURN_KEYS = "an array of element property keys to return (default is to return all element properties)";
 
     @ExtensionDefinition(extensionPoint = ExtensionPoint.GRAPH)
-    @ExtensionDescriptor(description = "execute SPARQL queries against a SAIL graph.")
+    @ExtensionDescriptor(description = "execute SPARQL queries against a SAIL graph.",
+                         api = {
+                             @ExtensionApi(parameterName = Tokens.REXSTER + "." + Tokens.SHOW_TYPES, description = API_SHOW_TYPES),
+                             @ExtensionApi(parameterName = Tokens.REXSTER + "." + Tokens.RETURN_KEYS, description = API_RETURN_KEYS)
+                         })
     public ExtensionResponse evaluateSparql(@RexsterContext RexsterResourceContext context,
                                           @RexsterContext Graph graph,
-                                          @ExtensionRequestParameter(name="query", description="a SPARQL query") String queryString,
-                                          @ExtensionRequestParameter(name="baseuri", description="the base URI for the query") String baseUri) {
+                                          @ExtensionRequestParameter(name="query", description=API_QUERY) String queryString) {
         if (queryString == null || queryString.isEmpty()) {
             ExtensionMethod extMethod = context.getExtensionMethod();
             return ExtensionResponse.error(
@@ -52,39 +65,28 @@ public class SparqlExtension extends AbstractRexsterExtension {
                     generateErrorJson(extMethod.getExtensionApiAsJson()));
         }
 
-        if (baseUri == null || baseUri.isEmpty()) {
-            ExtensionMethod extMethod = context.getExtensionMethod();
-            return ExtensionResponse.error(
-                    "the baseuri parameter cannot be empty",
-                    null,
-                    Response.Status.BAD_REQUEST.getStatusCode(),
-                    null,
-                    generateErrorJson(extMethod.getExtensionApiAsJson()));
-        }
+        JSONObject requestObject = context.getRequestObject();
+        boolean showDataTypes = RequestObjectHelper.getShowTypes(requestObject);
+        List<String> returnKeys = RequestObjectHelper.getReturnKeys(requestObject, WILDCARD);
 
-        if (!(graph instanceof IndexableGraph)) {
+        if (!(graph instanceof SailGraph)) {
             throw new WebApplicationException();
         }
 
-        Sail sail = new GraphSail((IndexableGraph) graph);
-        SailConnection sc;
-
         try {
-            sc = sail.getConnection();
-        } catch (SailException se) {
-            throw new WebApplicationException(se);
-        }
 
-        SPARQLParser parser = new SPARQLParser();
-        CloseableIteration<? extends BindingSet, QueryEvaluationException> sparqlResults;
+            SailGraph sailGraph = (SailGraph) graph;
+            List<Map<String, Vertex>> sparqlResults = sailGraph.executeSparql(queryString);
 
-        try {
-            ParsedQuery query = parser.parseQuery(queryString, baseUri);
-            sparqlResults = sc.evaluate(query.getTupleExpr(), query.getDataset(), new EmptyBindingSet(), false);
             JSONArray jsonArray = new JSONArray();
 
-            while (sparqlResults.hasNext()) {
-                jsonArray.put(sparqlResults.next().toString());
+            for (Map<String, Vertex> map : sparqlResults) {
+                Map<String, ElementJSONObject> mapOfJson = new HashMap<String, ElementJSONObject>();
+                for (String key : map.keySet()) {
+                    mapOfJson.put(key, new ElementJSONObject(map.get(key), returnKeys, showDataTypes));
+                }
+
+                jsonArray.put(new JSONObject(mapOfJson));
             }
 
             HashMap<String, Object> resultMap = new HashMap<String, Object>();
