@@ -1,6 +1,6 @@
 !https://github.com/tinkerpop/blueprints/raw/master/doc/images/openrdf-logo.png!:http://www.openrdf.org
 
-The "SPARQL":http://www.w3.org/TR/rdf-sparql-query/ Kibble provides a means to execute SPARQL queries against "SAIL graph":https://github.com/tinkerpop/blueprints/wiki/Sail-Implementation implementations.
+The "SPARQL":http://www.w3.org/TR/rdf-sparql-query/ Kibble provides a means to execute SPARQL queries against "Sail graph":https://github.com/tinkerpop/blueprints/wiki/Sail-Implementation implementations.
 
 h2. REST API
 
