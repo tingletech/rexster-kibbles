@@ -19,7 +19,7 @@ public class PingExtension extends AbstractSampleExtension {
     /**
      * Exposes the ping extension from the root of the graph name accepting a single parameter
      * called "reply" which will be echoed back in the a JSON response.
-     *
+     * <p/>
      * The "reply" parameter is the only parameter that matters for purpose of the ping extension.
      * The remaining parameters ("context" and "graph") are present only for example purposes.  In
      * a more realistic example, the extension would make use of these types of objects to perform
@@ -29,7 +29,7 @@ public class PingExtension extends AbstractSampleExtension {
     @ExtensionDescriptor(description = "a simple ping extension.")
     public ExtensionResponse evaluatePing(@RexsterContext RexsterResourceContext context,
                                           @RexsterContext Graph graph,
-                                          @ExtensionRequestParameter(name="reply", description="a value to reply with") String reply) {
+                                          @ExtensionRequestParameter(name = "reply", description = "a value to reply with") String reply) {
         if (reply == null || reply.isEmpty()) {
             ExtensionMethod extMethod = context.getExtensionMethod();
             return ExtensionResponse.error(

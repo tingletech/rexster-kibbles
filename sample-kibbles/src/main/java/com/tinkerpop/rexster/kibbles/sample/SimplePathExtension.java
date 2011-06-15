@@ -1,15 +1,13 @@
 package com.tinkerpop.rexster.kibbles.sample;
 
-import com.tinkerpop.blueprints.pgm.Edge;
 import com.tinkerpop.blueprints.pgm.Graph;
-import com.tinkerpop.blueprints.pgm.Vertex;
 import com.tinkerpop.rexster.extension.*;
 
 import java.util.HashMap;
 
 /**
  * An extension that showcases the methods available to those who wish to extend Rexster.
- *
+ * <p/>
  * This sample focuses on path-level extensions.  Path-level extensions add the extension
  * to the root of the specified ExtensionPoint followed by the value specified in the
  * "path" parameter of the @ExtensionDefinition.  It is important to ensure that paths
@@ -23,9 +21,9 @@ public class SimplePathExtension extends AbstractSampleExtension {
     /**
      * By adding the @RexsterContext attribute to the "graph" parameter, the graph requested gets
      * automatically injected into the extension.  Therefore, when the following URI is requested:
-     *
+     * <p/>
      * http://localhost:8182/tinkergraph/tp/simple-path/some-work
-     *
+     * <p/>
      * the graph called "graphname" will be pushed into this method.
      */
     @ExtensionDefinition(extensionPoint = ExtensionPoint.GRAPH, path = "some-work")
@@ -34,17 +32,17 @@ public class SimplePathExtension extends AbstractSampleExtension {
         return toStringIt(graph, "some");
     }
 
-     /**
+    /**
      * By adding the @RexsterContext attribute to the "graph" parameter, the graph requested gets
      * automatically injected into the extension.  Therefore, when the following URI is requested:
-     *
+     * <p/>
      * http://localhost:8182/tinkergraph/tp/simple-path/other-work
-     *
+     * <p/>
      * the graph called "graphname" will be pushed into this method.
      */
     @ExtensionDefinition(extensionPoint = ExtensionPoint.GRAPH, path = "other-work")
     @ExtensionDescriptor(description = "returns the results of the toString() method on the edge.")
-    public ExtensionResponse doOtherWorkOnGraph(@RexsterContext Graph graph){
+    public ExtensionResponse doOtherWorkOnGraph(@RexsterContext Graph graph) {
         return toStringIt(graph, "other");
     }
 
@@ -52,11 +50,11 @@ public class SimplePathExtension extends AbstractSampleExtension {
      * This method helps the root methods by wrapping the output of the toString of the graph element
      * in JSON to be returned in the ExtensionResponse.  ExtensionResponse has numerous helper methods
      * to make it easy to build the response object.
-     *
+     * <p/>
      * Outputted JSON (if the object is a graph) will look like this:
-     *
+     * <p/>
      * {"output":"tinkergraph[vertices:6 edges:6]","version":"0.3-SNAPSHOT","queryTime":38.02189}
-     *
+     * <p/>
      * Note the "version" and "queryTime" properties within the JSON.  Rexster will attempt to automatically
      * add these items when it understands the output to be JSON.  It is possible to override this default
      * behavior by setting the tryIncludeRexsterAttributes on the @Extension definition to false.

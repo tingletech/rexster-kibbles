@@ -2,12 +2,10 @@ package com.tinkerpop.rexster.kibbles.sample;
 
 import com.tinkerpop.blueprints.pgm.Edge;
 import com.tinkerpop.blueprints.pgm.Vertex;
-import com.tinkerpop.rexster.RexsterApplicationGraph;
 import com.tinkerpop.rexster.extension.*;
 
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.util.Map;
 
 /**
  * An extension that returns an XML representation of a vertex and an edge.

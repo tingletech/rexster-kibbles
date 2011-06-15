@@ -12,7 +12,7 @@ import javax.ws.rs.core.Response;
 
 public class SimplePathExtensionTest {
     private Graph graph;
-    private SimplePathExtension simplePathExtension = new SimplePathExtension ();
+    private SimplePathExtension simplePathExtension = new SimplePathExtension();
 
     @Before
     public void beforeTest() {

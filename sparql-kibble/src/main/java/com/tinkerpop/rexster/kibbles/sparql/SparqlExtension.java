@@ -1,33 +1,18 @@
 package com.tinkerpop.rexster.kibbles.sparql;
 
 
-import com.tinkerpop.blueprints.pgm.Edge;
 import com.tinkerpop.blueprints.pgm.Graph;
-import com.tinkerpop.blueprints.pgm.IndexableGraph;
 import com.tinkerpop.blueprints.pgm.Vertex;
 import com.tinkerpop.blueprints.pgm.impls.sail.SailGraph;
-import com.tinkerpop.blueprints.pgm.oupls.sail.GraphSail;
 import com.tinkerpop.rexster.ElementJSONObject;
 import com.tinkerpop.rexster.RexsterResourceContext;
 import com.tinkerpop.rexster.Tokens;
 import com.tinkerpop.rexster.extension.*;
-import com.tinkerpop.rexster.util.ElementJSONHelper;
 import com.tinkerpop.rexster.util.RequestObjectHelper;
-import info.aduna.iteration.CloseableIteration;
 import org.apache.log4j.Logger;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONObject;
-import org.openrdf.query.BindingSet;
-import org.openrdf.query.MalformedQueryException;
-import org.openrdf.query.QueryEvaluationException;
-import org.openrdf.query.impl.EmptyBindingSet;
-import org.openrdf.query.parser.ParsedQuery;
-import org.openrdf.query.parser.sparql.SPARQLParser;
-import org.openrdf.sail.Sail;
-import org.openrdf.sail.SailConnection;
-import org.openrdf.sail.SailException;
 
-import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 import java.util.HashMap;
 import java.util.List;
@@ -51,13 +36,13 @@ public class SparqlExtension extends AbstractRexsterExtension {
 
     @ExtensionDefinition(extensionPoint = ExtensionPoint.GRAPH)
     @ExtensionDescriptor(description = "execute SPARQL queries against a SAIL graph.",
-                         api = {
-                             @ExtensionApi(parameterName = Tokens.REXSTER + "." + Tokens.SHOW_TYPES, description = API_SHOW_TYPES),
-                             @ExtensionApi(parameterName = Tokens.REXSTER + "." + Tokens.RETURN_KEYS, description = API_RETURN_KEYS)
-                         })
+            api = {
+                    @ExtensionApi(parameterName = Tokens.REXSTER + "." + Tokens.SHOW_TYPES, description = API_SHOW_TYPES),
+                    @ExtensionApi(parameterName = Tokens.REXSTER + "." + Tokens.RETURN_KEYS, description = API_RETURN_KEYS)
+            })
     public ExtensionResponse evaluateSparql(@RexsterContext RexsterResourceContext context,
-                                          @RexsterContext Graph graph,
-                                          @ExtensionRequestParameter(name="query", description=API_QUERY) String queryString) {
+                                            @RexsterContext Graph graph,
+                                            @ExtensionRequestParameter(name = "query", description = API_QUERY) String queryString) {
         if (queryString == null || queryString.isEmpty()) {
             ExtensionMethod extMethod = context.getExtensionMethod();
             return ExtensionResponse.error(
@@ -108,7 +93,7 @@ public class SparqlExtension extends AbstractRexsterExtension {
         } catch (Exception mqe) {
             logger.error(mqe);
             return ExtensionResponse.error(
-                        "Error executing SPARQL query [" + queryString + "]", generateErrorJson());
+                    "Error executing SPARQL query [" + queryString + "]", generateErrorJson());
         }
 
     }

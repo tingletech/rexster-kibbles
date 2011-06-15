@@ -13,7 +13,7 @@ import javax.ws.rs.core.Response;
 
 public class ProducesXmlExtensionTest {
     private Graph graph;
-    private ProducesXmlExtension extension = new ProducesXmlExtension ();
+    private ProducesXmlExtension extension = new ProducesXmlExtension();
 
     @Before
     public void beforeTest() {

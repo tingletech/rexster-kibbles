@@ -21,10 +21,10 @@ import java.util.Map;
 
 /**
  * An extension that exposes Tinkerpop Frames via Rexster.  Configuration in rexster.xml looks like:
- *
+ * <p/>
  * <configuration>
- *   <person>com.tinkerpop.frames.domain.classes.Person</person>
- *   <project>com.tinkerpop.frames.domain.classes.Project</project>
+ * <person>com.tinkerpop.frames.domain.classes.Person</person>
+ * <project>com.tinkerpop.frames.domain.classes.Project</project>
  * </configuration>
  */
 @ExtensionNaming(name = FramesExtension.EXTENSION_NAME, namespace = FramesExtension.EXTENSION_NAMESPACE)
@@ -40,9 +40,9 @@ public class FramesExtension extends AbstractRexsterExtension {
     @ExtensionDefinition(extensionPoint = ExtensionPoint.EDGE)
     @ExtensionDescriptor(description = "Frames extension for an edge.")
     public ExtensionResponse doFramesWorkOnEdge(@RexsterContext RexsterResourceContext rexsterResourceContext,
-                                                  @RexsterContext Graph graph,
-                                                  @RexsterContext Edge edge,
-                                                  @ExtensionRequestParameter(name = "direction", description = "the direction of the edge (must be \"" + TOKEN_STANDARD + "\" or \"" + TOKEN_INVERSE + "\" with the default being \"" + TOKEN_STANDARD + "\"") String directionString){
+                                                @RexsterContext Graph graph,
+                                                @RexsterContext Edge edge,
+                                                @ExtensionRequestParameter(name = "direction", description = "the direction of the edge (must be \"" + TOKEN_STANDARD + "\" or \"" + TOKEN_INVERSE + "\" with the default being \"" + TOKEN_STANDARD + "\"") String directionString) {
         Direction direction = Direction.STANDARD;
         if (directionString != null && !directionString.isEmpty()) {
             if (directionString.equals(TOKEN_STANDARD)) {
@@ -67,17 +67,18 @@ public class FramesExtension extends AbstractRexsterExtension {
     @ExtensionDescriptor(description = "Frames extension for a vertex.")
     public ExtensionResponse doFramesWorkOnVertex(@RexsterContext RexsterResourceContext rexsterResourceContext,
                                                   @RexsterContext Graph graph,
-                                                  @RexsterContext Vertex vertex){
+                                                  @RexsterContext Vertex vertex) {
         return this.frameItUp(rexsterResourceContext, graph, vertex, null);
     }
 
     /**
      * Frames up a graph element.
+     *
      * @param rexsterResourceContext The Rexster context.
-     * @param graph The graph from which the element is framed.
-     * @param element A vertex or an edge.
-     * @param direction The direction of the edge.  Only relevant for frame edges and should be
-     *                  set to null for vertices.
+     * @param graph                  The graph from which the element is framed.
+     * @param element                A vertex or an edge.
+     * @param direction              The direction of the edge.  Only relevant for frame edges and should be
+     *                               set to null for vertices.
      * @return The response.
      */
     private ExtensionResponse frameItUp(RexsterResourceContext rexsterResourceContext, Graph graph, Element element, Direction direction) {
@@ -143,7 +144,7 @@ public class FramesExtension extends AbstractRexsterExtension {
         } else {
             // bad configuration
             extensionResponse = ExtensionResponse.error(
-                        "Frames configuration is not valid.  Please check rexster.xml", generateErrorJson());
+                    "Frames configuration is not valid.  Please check rexster.xml", generateErrorJson());
         }
 
         return extensionResponse;

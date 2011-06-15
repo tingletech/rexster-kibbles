@@ -7,17 +7,17 @@ import java.util.Map;
 
 /**
  * Demonstrates how to do a simple Map based configuration of an extension.
- *
+ * <p/>
  * This extension expects a configuration that contains a simple set of name
  * value pairs:
- *
+ * <p/>
  * <configuration>
- *   <some-key>some-value</some-key>
- *   <other-key>other-value</other-key>
+ * <some-key>some-value</some-key>
+ * <other-key>other-value</other-key>
  * </configuration>
  */
 @ExtensionNaming(name = MapConfigurationExtension.EXTENSION_NAME, namespace = AbstractSampleExtension.EXTENSION_NAMESPACE)
-public class MapConfigurationExtension extends AbstractSampleExtension{
+public class MapConfigurationExtension extends AbstractSampleExtension {
     public static final String EXTENSION_NAME = "map-config";
 
     private static final String CONFIG_SOME_KEY = "some-key";
@@ -39,7 +39,7 @@ public class MapConfigurationExtension extends AbstractSampleExtension{
 
     /**
      * Ensures that the configuration is valid.
-     *
+     * <p/>
      * A valid configuration is one that has a map like structure and contains two keys.
      */
     @Override

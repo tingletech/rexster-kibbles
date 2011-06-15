@@ -6,13 +6,13 @@
 
     <groupId>com.tinkerpop</groupId>
     <artifactId>sparql-kibble</artifactId>
-    <version>0.1-SNAPSHOT</version>
+    <version>0.4-SNAPSHOT</version>
 
     <packaging>jar</packaging>
     <url>http://rexster-kibbles.tinkerpop.com</url>
     <name>Rexster Kibbles: SPARQL</name>
     <description>
-        Execute a SPARQL query against a SAILGraph.
+        Execute a SPARQL query against a Sailraph.
     </description>
     <developers>
         <developer>
@@ -22,23 +22,22 @@
         </developer>
     </developers>
     <inceptionYear>2011</inceptionYear>
-
     <dependencies>
         <!-- TinkerPop -->
         <dependency>
             <groupId>com.tinkerpop.blueprints</groupId>
             <artifactId>blueprints-core</artifactId>
-            <version>0.7</version>
+            <version>0.8-SNAPSHOT</version>
         </dependency>
         <dependency>
-           <groupId>com.tinkerpop.blueprints</groupId>
-           <artifactId>blueprints-graph-sail</artifactId>
-           <version>0.7</version>
+            <groupId>com.tinkerpop.blueprints</groupId>
+            <artifactId>blueprints-sail-graph</artifactId>
+            <version>0.8-SNAPSHOT</version>
         </dependency>
         <dependency>
-          <groupId>com.tinkerpop</groupId>
-          <artifactId>rexster</artifactId>
-          <version>0.4-SNAPSHOT</version>
+            <groupId>com.tinkerpop</groupId>
+            <artifactId>rexster</artifactId>
+            <version>0.4-SNAPSHOT</version>
         </dependency>
         <!-- CONFIGURATION -->
         <dependency>
@@ -52,7 +51,7 @@
             <artifactId>jersey-server</artifactId>
             <version>1.4</version>
         </dependency>
-         <!-- LOGGING -->
+        <!-- LOGGING -->
         <dependency>
             <groupId>log4j</groupId>
             <artifactId>log4j</artifactId>
@@ -82,7 +81,6 @@
             <id>maven-repository.dev.java.net</id>
             <name>Java.net Maven 1 Repository (legacy)</name>
             <url>http://download.java.net/maven/1</url>
-            <layout>legacy</layout>
         </repository>
         <repository>
             <id>tinkerpop-repository</id>
@@ -98,29 +96,30 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
     <build>
-        <directory>${basedir}/target</directory>
-        <finalName>${artifactId}-${version}</finalName>
+        <directory>${project.basedir}/target</directory>
+        <finalName>${project.artifactId}-${project.version}</finalName>
         <resources>
             <resource>
-                <directory>${basedir}/src/main/resources
+                <directory>${project.basedir}/src/main/resources
                 </directory>
             </resource>
         </resources>
         <testResources>
             <testResource>
-                <directory>${basedir}/src/test/resources
+                <directory>${project.basedir}/src/test/resources
                 </directory>
             </testResource>
         </testResources>
         <plugins>
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
+                <version>2.3.2</version>
                 <configuration>
                     <source>1.6</source>
                     <target>1.6</target>
                 </configuration>
             </plugin>
-        <plugin>
+            <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
                 <version>2.2-beta-4</version>
                 <executions>

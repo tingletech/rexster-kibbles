@@ -12,7 +12,7 @@ import javax.ws.rs.core.Response;
 
 public class SimpleRootExtensionTest {
     private Graph graph;
-    private SimpleRootExtension simpleRootExtension = new SimpleRootExtension ();
+    private SimpleRootExtension simpleRootExtension = new SimpleRootExtension();
 
     @Before
     public void beforeTest() {
