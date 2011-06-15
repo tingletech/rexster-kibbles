@@ -3,11 +3,9 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-
     <groupId>com.tinkerpop</groupId>
     <artifactId>frames-kibble</artifactId>
-    <version>0.4-SNAPSHOT</version>
-
+    <version>0.4</version>
     <packaging>jar</packaging>
     <url>http://rexster-kibbles.tinkerpop.com</url>
     <name>Rexster Kibbles: Frames</name>
@@ -27,23 +25,22 @@
         </developer>
     </developers>
     <inceptionYear>2011</inceptionYear>
-
     <dependencies>
         <!-- TinkerPop -->
         <dependency>
             <groupId>com.tinkerpop.blueprints</groupId>
             <artifactId>blueprints-core</artifactId>
-            <version>0.8-SNAPSHOT</version>
+            <version>0.8</version>
         </dependency>
         <dependency>
             <groupId>com.tinkerpop</groupId>
             <artifactId>frames</artifactId>
-            <version>0.3-SNAPSHOT</version>
+            <version>0.3</version>
         </dependency>
         <dependency>
             <groupId>com.tinkerpop</groupId>
             <artifactId>rexster</artifactId>
-            <version>0.4-SNAPSHOT</version>
+            <version>0.4</version>
         </dependency>
         <!-- CONFIGURATION -->
         <dependency>
