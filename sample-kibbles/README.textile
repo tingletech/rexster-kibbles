@@ -7,6 +7,7 @@ The following examples are included:
 |_. extension |_. description |_. uri |
 | @MapConfigurationExtension@ | Demonstrates how graph specific configuration in rexster.xml can be exposed to the extension. | @http://base/graph/tp-sample/map-config@ |
 | @PingExtension@ | Performs a simple echo of the value of a URI query string parameter. | @http://base/graph/tp-sample/ping@ |
+| @PingAddOnExtension@ | Performs a simple echo of the value of a URI query string parameter demonstrating that Extensions can be spread across multiple classes within a namespace and extension name. | @http://base/graph/tp-sample/ping/pong@ |
 | @ProducesXmlExtension@ | Demonstrates how to return types other than @application/json@. | @http://base/graph/vertices/1/tp-sample/produces-xml@
 @http://base/graph/edges/1/tp-sample/produces-xml@ |
 | @SimplePathExtension@  | Demonstrates how a pathed extension works where multiple extension methods are exposed from the same extension point. | @http://base/graph/tp-sample/simple-path/some-work@
