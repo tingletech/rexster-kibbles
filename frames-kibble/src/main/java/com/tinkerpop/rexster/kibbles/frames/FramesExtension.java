@@ -160,7 +160,7 @@ public class FramesExtension extends AbstractRexsterExtension {
 
         if (extensionConfiguration != null) {
             Map<String, String> mapFrames = extensionConfiguration.tryGetMapFromConfiguration();
-            valid = mapFrames != null && !mapFrames.isEmpty();
+            valid = mapFrames != null && !mapFrames.isEmpty() && mapFrames.size() > 0;
         }
 
         return valid;
